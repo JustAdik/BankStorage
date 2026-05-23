@@ -17,7 +17,7 @@ public class BankService implements UserDetailsService{
         this.bankRepository = bankRepository;
     }
 
-    public UserDetails loadByUsername(String username) {
+    public UserDetails loadUserByUsername(String username) {
         BankUser bankUser = bankRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Такого пользователя не существует"));
 
@@ -27,4 +27,5 @@ public class BankService implements UserDetailsService{
                 .roles(bankUser.getRole().replace("ROLE_", ""))
                 .build();
     }
+
 }
