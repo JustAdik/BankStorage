@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bank of Kazakhstan</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root{
+          --kz-blue:#00A3DD;
+          --kz-blue-dark:#008bbd;
+        }
+
+        body{
+          font-family: "Montserrat", sans-serif;
+          min-height:100vh;
+          background: radial-gradient(1200px 1200px at 100% 0, #5fd3ff 0%, var(--kz-blue) 40%, #0077a3 100%);
+          display:flex; align-items:center; justify-content:center;
+        }
+
+        .card{
+          border:none;
+          border-radius:20px;
+          box-shadow: 0 20px 60px rgba(0,0,0,.3);
+        }
+
+        .card-header{
+          background: var(--kz-blue);
+          color:white;
+          text-align:center;
+          padding:25px;
+        }
+
+        .btn-kz{
+          background: var(--kz-blue);
+          color:white;
+          border:none;
+          border-radius:10px;
+          padding:10px;
+          font-weight:700;
+        }
+
+        .btn-kz:hover{
+          background: var(--kz-blue-dark);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container" style="max-width: 520px;">
+    <div class="card bg-white">
+        <div class="card-header">
+            <div class="d-flex align-items-center justify-content-center mb-2">
+                <div class="flag-circle"><span>🇹🇷</span></div>
+                <div class="brand">StudentLife Turkey</div>
+            </div>
+            <div class="small" style="opacity:.9">🧾 Регистрация</div>
+        </div>
+
+        <div class="card-body p-4">
+            <div th:if="${error}" class="alert alert-danger mb-3" th:text="${error}"></div>
+
+            <form th:action="@{/register}" th:object="${user}" method="post" novalidate>
+
+
+                <div class="mb-3">
+                    <label class="form-label">Имя пользователя</label>
+                    <input type="text" th:field="*{username}" class="form-control" placeholder="Придумайте логин" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" th:field="*{password}" class="form-control" placeholder="Создайте пароль" required>
+                    <div class="form-hint">Минимум 6 символов. Не используйте простой пароль.</div>
+                </div>
+
+                <button type="submit" class="btn btn-tr w-100">Создать аккаунт</button>
+            </form>
+
+            <div class="helper">
+
+                <a th:href="@{/login}" style="color:#E30A17; font-weight:700; text-decoration:underline;">
+                    Уже есть аккаунт? Войти
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

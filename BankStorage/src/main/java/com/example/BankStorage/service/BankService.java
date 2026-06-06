@@ -22,7 +22,7 @@ public class BankService implements UserDetailsService{
                 .orElseThrow(() -> new UsernameNotFoundException("Такого пользователя не существует"));
 
         return User.builder()
-                .username(bankUser.getName())
+                .username(bankUser.getUsername())
                 .password(bankUser.getPassword())
                 .roles(bankUser.getRole().replace("ROLE_", ""))
                 .build();

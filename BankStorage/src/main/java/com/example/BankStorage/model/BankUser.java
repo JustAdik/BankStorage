@@ -7,19 +7,23 @@ import jakarta.persistence.Id;
 
 @Entity
 public class BankUser {
+    
 @Id
-@GeneratedValue(strategy = GenerationType.AUTO)
+@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String username;
     private String role;
     private int balance;
     private String password;
     private int age;
 
+    public BankUser() {
+    }
+
     public BankUser(Long id, String name, String role, int balance, String password, int age) {
         this.id = id;
-        this.name = name;
+        this.username = name;
         this.role = role;
         this.balance = balance;
         this.password = password;
@@ -34,12 +38,12 @@ public class BankUser {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getRole() {
