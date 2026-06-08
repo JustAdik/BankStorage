@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface BankRepository extends JpaRepository<BankUser, Long> {
     Optional<BankUser> findByUsername(String username);
+    Optional<BankUser> findByIdenticalNumber(String identicalNumber);
 }

@@ -2,6 +2,7 @@ package com.example.BankStorage.controller;
 
 import com.example.BankStorage.model.BankUser;
 import com.example.BankStorage.repository.BankRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,19 +11,36 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class AuthController {
+public class RegisterController {
     private BankRepository bankRepository;
     private PasswordEncoder passwordEncoder;
 
-    public AuthController(BankRepository bankRepository, PasswordEncoder passwordEncoder) {
+    public RegisterController(BankRepository bankRepository, PasswordEncoder passwordEncoder) {
         this.bankRepository = bankRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/register")
-    public String registerForm(Model model) {
+    public String registerForm(Model model, BankUser bankUser) {
         model.addAttribute("user", new BankUser());
         return "register";
+    }
+
+    @GetMapping("/")
+    public String bank(Model model, Authentication auth) {
+
+        BankUser user = bankRepository
+                .findByUsername(auth.getName())
+                .orElseThrow();
+
+        model.addAttribute("user", user);
+
+        return "bank";
+    }
+
+    private String generateIdenticalNumber() {
+        long count = bankRepository.count() + 1;
+        return String.format("KZ%06d", count);
     }
 
     @PostMapping("/register")
@@ -35,6 +53,7 @@ public class AuthController {
         bankUser.setPassword(passwordEncoder.encode(bankUser.getPassword()));
         bankUser.setBalance(0);
         bankUser.setRole("USER");
+        bankUser.setIdenticalNumber(generateIdenticalNumber());
         bankRepository.save(bankUser);
         return "redirect:/login";
     }

@@ -1,9 +1,6 @@
 package com.example.BankStorage.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class BankUser {
@@ -17,25 +14,19 @@ public class BankUser {
     private int balance;
     private String password;
     private int age;
+    @Column(unique = true)
+    private String identicalNumber;
+
 
     public BankUser() {
     }
 
-    public BankUser(Long id, String name, String role, int balance, String password, int age) {
-        this.id = id;
+    public BankUser(String name, String role, int balance, String password, String identicalNumber) {
         this.username = name;
         this.role = role;
         this.balance = balance;
         this.password = password;
-        this.age = age;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.identicalNumber = identicalNumber;
     }
 
     public String getUsername() {
@@ -76,5 +67,13 @@ public class BankUser {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getIdenticalNumber() {
+        return identicalNumber;
+    }
+
+    public void setIdenticalNumber(String identicalNumber) {
+        this.identicalNumber = identicalNumber;
     }
 }

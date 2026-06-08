@@ -65,13 +65,119 @@
 
     </style>
 </head>
-<body>
-
 
 <header>
     <h1>Bank of Kazakhstan</h1>
     <p></p>
 </header>
 
+<body>
+
+<div class="card border-0 shadow-lg mb-4"
+     style="border-radius: 25px; background: linear-gradient(135deg, #ffffff, #f8f9fa);">
+
+    <div class="card-body text-center p-5">
+
+        <h5 class="text-secondary mb-3">
+            Текущий баланс
+        </h5>
+
+        <h1 class="display-2 fw-bold text-success"
+            th:text="${user.balance} + ' ₸'">
+            0 ₸
+        </h1>
+
+        <p class="text-muted mt-2">
+            Доступно для операций
+        </p>
+
+    </div>
+
+</div>
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card border-0 shadow">
+                <div class="card-body text-center">
+
+                    <h4>
+                        👤 Пользователь
+                    </h4>
+
+                    <hr>
+
+                    <p>
+                        <strong>Логин:</strong>
+                        <span th:text="${user.username}"></span>
+                    </p>
+
+                    <p>
+                        <strong>Роль:</strong>
+                        <span th:text="${user.role}"></span>
+                    </p>
+
+                    <p>
+                        <strong>Номер счёта:</strong>
+                        <span th:text="${user.identicalNumber}"></span>
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+<!--        <div class="col-md-4">-->
+<!--            <div class="card info-card mb-3">-->
+<!--                <div class="card-body text-center">-->
+<!--                    <h5>Возраст</h5>-->
+<!--                    <p th:text="${user.age}"></p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+    </div>
+
+    <div class="row mt-4">
+
+        <div class="col-md-4">
+            <form th:action="@{/topup}" method="post" class="d-flex me-2">
+                <input type="number" name="amount" placeholder="Сумма" required class="form-control form-control-sm me-2"/>
+                <button type="submit" class="btn btn-warning btn-sm">Пополнить</button>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <a href="/transfer"
+               class="btn btn-warning w-100 action-btn">
+                💸 Перевод
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="/history"
+               class="btn btn-info w-100 action-btn">
+                📄 История
+            </a>
+        </div>
+
+    </div>
+
+    <div class="mt-5 text-center">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit"
+                    class="btn btn-danger">
+                Выйти
+            </button>
+        </form>
+    </div>
+
+</div>
+
+</body>
 
 </html>
