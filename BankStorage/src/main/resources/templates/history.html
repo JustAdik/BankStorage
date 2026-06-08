@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>История переводов</title>
+
+    <style>
+        :root{
+          --kz-blue:#00A3DD;
+          --kz-blue-dark:#008bbd;
+        }
+
+        body{
+          font-family: "Montserrat", sans-serif;
+          min-height:100vh;
+          background: radial-gradient(1200px 1200px at 100% 0, #5fd3ff 0%, var(--kz-blue) 40%, #0077a3 100%);
+          display:flex; align-items:center; justify-content:center;
+        }
+
+        .card{
+          border:none;
+          border-radius:20px;
+          box-shadow: 0 20px 60px rgba(0,0,0,.3);
+        }
+
+        .card-header{
+          background: var(--kz-blue);
+          color:white;
+          text-align:center;
+          padding:25px;
+        }
+
+        .btn-kz{
+          background: var(--kz-blue);
+          color:white;
+          border:none;
+          border-radius:10px;
+          padding:10px;
+          font-weight:700;
+        }
+
+        .btn-kz:hover{
+          background: var(--kz-blue-dark);
+        }
+
+    </style>
+</head>
+<body>
+
+<h2>История операций</h2>
+
+<table border="1">
+
+    <tr>
+        <th>Отправитель</th>
+        <th>Получатель</th>
+        <th>Сумма</th>
+        <th>Дата</th>
+    </tr>
+
+    <tr th:each="t : ${transactions}">
+        <td th:text="${t.senderAccount}"></td>
+        <td th:text="${t.receiverAccount}"></td>
+        <td th:text="${t.amount}"></td>
+        <td th:text="${t.date}"></td>
+    </tr>
+
+</table>
+
+</body>
+</html>

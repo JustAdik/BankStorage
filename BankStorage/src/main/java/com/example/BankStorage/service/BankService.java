@@ -1,7 +1,9 @@
 package com.example.BankStorage.service;
 
 import com.example.BankStorage.model.BankUser;
+import com.example.BankStorage.model.Transaction;
 import com.example.BankStorage.repository.BankRepository;
+import com.example.BankStorage.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,15 +15,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class BankService implements UserDetailsService{
 
     private final BankRepository bankRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TransactionRepository transactionRepository;
 
-    public BankService(BankRepository bankRepository, PasswordEncoder passwordEncoder) {
+    public BankService(BankRepository bankRepository, PasswordEncoder passwordEncoder, TransactionRepository transactionRepository) {
         this.bankRepository = bankRepository;
         this.passwordEncoder = passwordEncoder;
+        this.transactionRepository = transactionRepository;
     }
 
     public void admin() {
@@ -73,9 +79,11 @@ public class BankService implements UserDetailsService{
         }
         sender.setBalance(sender.getBalance() - amount);
         receiver.setBalance(receiver.getBalance() + amount);
+        Transaction transaction = new Transaction(sender.getIdenticalNumber(), recieverAccount, amount, LocalDateTime.now());
 
         bankRepository.save(sender);
         bankRepository.save(receiver);
+        transactionRepository.save(transaction);
     }
 
 }
