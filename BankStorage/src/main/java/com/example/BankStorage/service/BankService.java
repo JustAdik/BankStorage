@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 
@@ -47,7 +48,7 @@ public class BankService implements UserDetailsService{
     }
 
     //пополнение
-    public void topUp(int amount) {
+    public void topup(int amount) {
         BankUser bankUser = getCurrentUser();
         bankUser.setBalance(bankUser.getBalance() + amount);
         bankRepository.save(bankUser);
@@ -66,24 +67,39 @@ public class BankService implements UserDetailsService{
 
     //закидывать деньги
     @Transactional
-    public void transfer(String recieverAccount, int amount) {
+    public void transfer(String receiverAccount, int amount) {
         BankUser sender = getCurrentUser();
-        BankUser receiver = bankRepository.findByIdenticalNumber(recieverAccount).orElseThrow();
+        BankUser receiver = bankRepository.findByIdenticalNumber(receiverAccount).orElseThrow();
 
         if(sender.getBalance() < amount) {
-            throw new RuntimeException("Недастаточно средств");
+            throw new RuntimeException("Недостаточно средств");
         }
 
-        if(sender.getIdenticalNumber().equals(recieverAccount)) {
-            throw new RuntimeException("Вы не можете переводить самому себе");
+        if(sender.getIdenticalNumber().equals(receiver.getIdenticalNumber())) {
+            throw new RuntimeException("Вы не можете отправлять средства самому себе");
         }
+
         sender.setBalance(sender.getBalance() - amount);
         receiver.setBalance(receiver.getBalance() + amount);
-        Transaction transaction = new Transaction(sender.getIdenticalNumber(), recieverAccount, amount, LocalDateTime.now());
+
+        //история
+        Transaction transaction = new Transaction(sender.getIdenticalNumber(), receiverAccount, amount, LocalDateTime.now());
 
         bankRepository.save(sender);
         bankRepository.save(receiver);
         transactionRepository.save(transaction);
+    }
+
+    //search
+    public BankUser search(String receiverAccount) {
+        BankUser sender = getCurrentUser();
+
+        if(sender.getIdenticalNumber().equals(receiverAccount)) {
+            throw new RuntimeException("Вы не можете ввести себя в поиск");
+        }
+
+        return bankRepository.findByUsername(receiverAccount)
+                .orElseThrow(() -> new RuntimeException("Ползователь не найден"));
     }
 
 }

@@ -30,21 +30,20 @@ public class BankController {
         return "bank";
     }
 
-    @PostMapping("/topup")
+    @GetMapping("/topup")
     public String topup(@RequestParam int amount, Model model) {
-        bankService.topUp(amount);
-        model.addAttribute("message", "Ваш баланс пополнен на " + "тенге");
-        model.addAttribute("user", bankService.getCurrentUser());
+        bankService.topup(amount);
+        model.addAttribute("message", "Ваш баланс пополнен на" + "тенге");
         return "bank";
     }
 
     @GetMapping("/transfer")
-    public String transferPage() {
-        return "transfer";
+    public String transfer() {
+    return "transfer";
     }
 
     @PostMapping("/transfer")
-    public String transfer(@RequestParam String receiverAccount, @RequestParam int amount) {
+    public String transfer(@RequestParam("receiverAccount") String receiverAccount, @RequestParam int amount) {
         bankService.transfer(receiverAccount, amount);
         return "redirect:/bank";
     }
@@ -52,7 +51,24 @@ public class BankController {
     @GetMapping("/history")
     public String history(Model model) {
         BankUser bankUser = bankService.getCurrentUser();
-        model.addAttribute("transactions", transactionRepository.findBySenderAccountOrReceiverAccount(bankUser.getIdenticalNumber(), bankUser.getIdenticalNumber()));
+
+        model.addAttribute("transactions", transactionRepository.findBySenderAccountOrReceiverAccount(
+                bankUser.getIdenticalNumber(),
+                bankUser.getIdenticalNumber()
+        ));
         return "history";
     }
+
+    @GetMapping("/search")
+    public String searchPage() {
+        return "search";
+    }
+
+    @PostMapping("/search")
+    public String search(@RequestParam String receiverAccount, Model model) {
+        BankUser receiver = bankService.search(receiverAccount);
+        model.addAttribute("receiver", receiver);
+        return "search";
+    }
+
 }
