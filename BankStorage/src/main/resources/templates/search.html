@@ -54,10 +54,13 @@
 
         <h2 class="text-center mb-4">Поиск пользователя</h2>
 
-        <form action="/search" method="get">
+        <form action="/search" method="post">
 
             <div class="mb-3">
                 <label class="form-label">Номер счета</label>
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
                 <input
                         type="text"
                         class="form-control"
@@ -72,26 +75,7 @@
 
         </form>
 
-        <div th:if="${receiver != null}" class="user-card">
 
-            <h4 class="mb-3">Найденный пользователь</h4>
-
-            <p>
-                <strong>Имя:</strong>
-                <span th:text="${receiver.username}"></span>
-            </p>
-
-            <p>
-                <strong>Номер счета:</strong>
-                <span th:text="${receiver.identicalNumber}"></span>
-            </p>
-
-            <p>
-                <strong>Роль:</strong>
-                <span th:text="${receiver.role}"></span>
-            </p>
-
-        </div>
 
         <div th:if="${error != null}" class="alert alert-danger mt-3">
             <span th:text="${error}"></span>

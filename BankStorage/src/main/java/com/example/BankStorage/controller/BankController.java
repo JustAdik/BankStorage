@@ -1,5 +1,6 @@
 package com.example.BankStorage.controller;
 import com.example.BankStorage.model.BankUser;
+import com.example.BankStorage.model.Message;
 import com.example.BankStorage.model.Transaction;
 import com.example.BankStorage.repository.BankRepository;
 import com.example.BankStorage.repository.TransactionRepository;
@@ -7,8 +8,11 @@ import com.example.BankStorage.service.BankService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 public class BankController {
@@ -68,7 +72,26 @@ public class BankController {
     public String search(@RequestParam String receiverAccount, Model model) {
         BankUser receiver = bankService.search(receiverAccount);
         model.addAttribute("receiver", receiver);
-        return "search";
+        return "redirect:/chat/" + receiver.getUsername();
+    }
+
+    @GetMapping("/chat/{username}")
+    public String messagePage(@PathVariable String username, Model model) {
+        BankUser bankUser = bankService.getCurrentUser();
+        BankUser receiver = bankRepository.findByUsername(username).orElseThrow();
+        List<Message> messages = bankService.getMessage(bankUser.getUsername(), username);
+        model.addAttribute("receiver", receiver);
+        model.addAttribute("currentUser", bankUser);
+        model.addAttribute("messages", messages);
+        return "chat";
+    }
+
+    @PostMapping("/chat")
+    public String message(@RequestParam String receiver,
+                          @RequestParam String text) {
+        BankUser currentUser = bankService.getCurrentUser();
+        bankService.message(currentUser.getUsername(), receiver, text);
+        return "redirect:/chat/" + receiver;
     }
 
 }

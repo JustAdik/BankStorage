@@ -1,8 +1,10 @@
 package com.example.BankStorage.service;
 
 import com.example.BankStorage.model.BankUser;
+import com.example.BankStorage.model.Message;
 import com.example.BankStorage.model.Transaction;
 import com.example.BankStorage.repository.BankRepository;
+import com.example.BankStorage.repository.MessageRepository;
 import com.example.BankStorage.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class BankService implements UserDetailsService{
@@ -24,11 +27,16 @@ public class BankService implements UserDetailsService{
     private final BankRepository bankRepository;
     private final PasswordEncoder passwordEncoder;
     private final TransactionRepository transactionRepository;
+    private final MessageRepository messageRepository;
 
-    public BankService(BankRepository bankRepository, PasswordEncoder passwordEncoder, TransactionRepository transactionRepository) {
+    public BankService(BankRepository bankRepository,
+                       PasswordEncoder passwordEncoder,
+                       TransactionRepository transactionRepository,
+                       MessageRepository messageRepository) {
         this.bankRepository = bankRepository;
         this.passwordEncoder = passwordEncoder;
         this.transactionRepository = transactionRepository;
+        this.messageRepository = messageRepository;
     }
 
     public void admin() {
@@ -45,6 +53,10 @@ public class BankService implements UserDetailsService{
         }
         String username = auth.getName();
         return bankRepository.findByUsername(username).orElse(null);
+    }
+
+    public List<Message> getMessage(String sender, String receiver) {
+        return messageRepository.findAll();
     }
 
     //пополнение
@@ -90,7 +102,7 @@ public class BankService implements UserDetailsService{
         transactionRepository.save(transaction);
     }
 
-    //search
+    //поиск
     public BankUser search(String receiverAccount) {
         BankUser sender = getCurrentUser();
 
@@ -98,8 +110,21 @@ public class BankService implements UserDetailsService{
             throw new RuntimeException("Вы не можете ввести себя в поиск");
         }
 
-        return bankRepository.findByUsername(receiverAccount)
+        return bankRepository.findByIdenticalNumber(receiverAccount)
                 .orElseThrow(() -> new RuntimeException("Ползователь не найден"));
     }
+
+    //чат
+    public void message(String sender, String receiver, String text) {
+        Message message = new Message();
+        message.setSenderMessage(sender);
+        message.setReceiverMessage(receiver);
+        message.setText(text);
+        message.setDate(LocalDateTime.now());
+
+        messageRepository.save(message);
+    }
+
+
 
 }
