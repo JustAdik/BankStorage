@@ -10,6 +10,7 @@ BankStorage is a banking web application developed with Java and Spring Boot. Th
 - Account balance management
 - Money transfers between users
 - Transaction history tracking
+- Built-in user messaging system with private chats
 - PostgreSQL database integration
 - RESTful architecture
 - Layered architecture (Controller → Service → Repository)
@@ -126,3 +127,4 @@ http://localhost:8080
 - `/bank` - view account information and balance
 - `/transfer` - transfer money to another account
 - `/history` - view transaction history
+- `/chat` - messaging system in chats
