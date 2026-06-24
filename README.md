@@ -46,6 +46,10 @@ BankStorage is a banking web application developed with Java and Spring Boot. Th
 - Search user Page
 <img width="1600" height="856" alt="image" src="https://github.com/user-attachments/assets/d88b4a5f-0062-48bd-9a02-3d8c2173fb26" />
 
+- Chat page
+<img width="1600" height="860" alt="image" src="https://github.com/user-attachments/assets/30072fef-57d8-436f-b625-f1e218951487" />
+
+
 
 
 ## Project Structure
